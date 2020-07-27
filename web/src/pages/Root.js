@@ -4,6 +4,7 @@ import PagesPromotionSearch from './Promotion/Search/Search';
 import PagesPromotionForm from './Promotion/Form/Form';
 
 const Root = () => {
+
   return(
   <BrowserRouter>
     <Switch>

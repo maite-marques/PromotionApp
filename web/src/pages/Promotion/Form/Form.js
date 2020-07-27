@@ -8,7 +8,9 @@ const PagesPromotionForm = () => {
     <div>
       FORM
       {id && <div>id: {id}</div>}
-    </div>)
+    </div>
+  );
 };
+
 
 export default PagesPromotionForm;
