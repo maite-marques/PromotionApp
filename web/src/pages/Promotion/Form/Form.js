@@ -10,6 +10,7 @@ const PagesPromotionForm = () => {
       {id && <div>id: {id}</div>}
     </div>
   );
-}
+};
+
 
 export default PagesPromotionForm;
