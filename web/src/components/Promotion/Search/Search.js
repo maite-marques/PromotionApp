@@ -35,7 +35,11 @@ const PromotionSearch = () => {
         value={search}
         onChange={(ev) => setSearch(ev.target.value)}
       />
-      <PromotionList promotions={loadInfo.data} loading={!loadInfo.loading}/>
+      <PromotionList 
+        promotions={loadInfo.data} 
+        loading={!loadInfo.loading}
+        error={loadInfo.error}
+      />
     </div>
   );
 };

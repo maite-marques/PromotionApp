@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const initialRequestInfo = {
-  erro: null,
+  error: null,
   data: null,
   loading: false
 };
@@ -15,13 +15,20 @@ export default function useApi(config) {
       ...requestInfo,
       loading: true
     });
-    
-    const response = await axios(config);
 
-    setRequestInfo({
-      ...requestInfo,
-      data: response.data
-    });
+    let response = null;
+    try {
+      response = await axios(config);
+      setRequestInfo({
+        ...requestInfo,
+        data: response.data
+      });
+    } catch (error) {
+      setRequestInfo({
+        ...requestInfo,
+        error,
+      });
+    }
 
     if(config.onCompleted) {
       config.onCompleted(response);
