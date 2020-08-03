@@ -18,7 +18,10 @@ export default function useApi(config) {
 
     let response = null;
     try {
-      response = await axios(config);
+      response = await axios({
+        baseUrl: 'http://localhost:5000',
+        ...config
+      });
       setRequestInfo({
         ...requestInfo,
         data: response.data
