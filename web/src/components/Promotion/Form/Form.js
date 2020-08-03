@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import useApi from '../../utils/useApi';
 import './Form.css';
 
 const initialValue = {
@@ -13,37 +14,40 @@ const initialValue = {
 const PromotionForm = ({ id }) => {
   const [values, setValues] = useState(id ? null : initialValue);
   const history = useHistory();
+  const[load] = useApi({
+    url: `/promotions/${id}`,
+    method: 'get',
+    onCompleted: (response) => {
+      setValues(response.data);
+    }
+  });
 
-  console.log(id);
+  const [save, saveInfo] = useApi({
+    url: id ? `/promotions/${id}` : '/promotions',
+    method: id ? 'put' : 'post',
+    data: values,
+    onCompleted: (response) => {
+      if (!response.error) {
+        history.push('/');
+      };
+    }
+  });
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:5000/promotions/${id}`)
-        .then((response) => {
-          console.log(response.data);
-          setValues(response.data);
-      })
+      load();
     }
   }, [id]);
 
   function onChange(ev) {
     const { name, value } = ev.target;
+
     setValues({ ...values, [name]: value });
-    console.log(values);
   }
 
   function onSubmit(ev) {
     ev.preventDefault();
-
-    const method = id ? 'put' : 'post';
-    const url = id 
-      ? `http://localhost:5000/promotions/${id}` 
-      : 'http://localhost:5000/promotions'
-
-    axios[method](url, values)
-      .then((response) => {
-        history.push('/');
-      });
+    save();
   }
 
   return(
@@ -55,6 +59,7 @@ const PromotionForm = ({ id }) => {
           <div>Carregando...</div>
         ) : (
           <form onSubmit={onSubmit}>
+            {saveInfo.loading && <span>Salvando dados...</span>}
             <div className="promotion-form__group">
               <label htmlFor="title">Título</label>
               <input id="title" name="title" type="text" onChange={onChange} value={values.title} />
